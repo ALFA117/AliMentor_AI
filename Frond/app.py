@@ -20,7 +20,7 @@ current_run = 1
 feedback_data = [
     {
         'id_feedback': 1,
-        'usuario_id': 3,  # Baeza
+        'usuario_id': 3,  # Demo
         'plato_id': 4,    # Enchiladas Suizas
         'plato_nombre': 'Enchiladas Suizas',
         'comentario': 'Muy sabroso, pero contiene lactosa',
@@ -30,7 +30,7 @@ feedback_data = [
     },
     {
         'id_feedback': 2,
-        'usuario_id': 3,  # Baeza
+        'usuario_id': 3,  # Demo
         'plato_id': 5,    # Camarones al Ajillo
         'plato_nombre': 'Camarones al Ajillo',
         'comentario': 'Excelente sabor, pero no puedo comerlo por alergia a mariscos',
@@ -60,9 +60,9 @@ usuarios_db = {
         'alergias': ['mariscos'],
         'enfermedades': []
     },
-    'Baeza': {
+    'Demo': {
         'id_usuario': 3,
-        'nombre': 'Baeza',
+        'nombre': 'Demo',
         'edad': 25,
         'genero': 'Masculino',
         'restricciones': ['sin lactosa'],

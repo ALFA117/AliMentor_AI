@@ -1911,7 +1911,7 @@ document.addEventListener('DOMContentLoaded', function() {
 const SIMULATION_CONFIG = {
     enabled: true,
     demoUser: {
-        username: 'Baeza',
+        username: 'Demo',
         password: '12345',
         id: 3
     },
@@ -1958,7 +1958,7 @@ function addSimulationControls() {
             <div class="demo-credentials">
                 <div class="credential-item">
                     <span class="label">Usuario:</span>
-                    <span class="value">Baeza</span>
+                    <span class="value">Demo</span>
                 </div>
                 <div class="credential-item">
                     <span class="label">Contraseña:</span>
@@ -1982,7 +1982,7 @@ function addDemoCredentialsHint() {
         hint.innerHTML = `
             <div class="hint-content">
                 <i class="fas fa-info-circle"></i>
-                <span>Para la demostración, usa: <strong>Baeza</strong> / <strong>12345</strong></span>
+                <span>Para la demostración, usa: <strong>Demo</strong> / <strong>12345</strong></span>
             </div>
         `;
         loginForm.appendChild(hint);
@@ -1997,7 +1997,7 @@ function setupSimulationEventListeners() {
     
     if (usernameInput && passwordInput) {
         usernameInput.addEventListener('input', function() {
-            if (this.value.toLowerCase() === 'baeza') {
+            if (this.value.toLowerCase() === 'demo') {
                 passwordInput.value = '12345';
                 showNotification('🔑 Credenciales de demostración cargadas', 'info');
             }
@@ -2257,7 +2257,7 @@ function showSimulationCompletion() {
                 </div>
             </div>
             <h2>🎉 ¡Simulación Completada!</h2>
-            <p>✅ Usuario <strong>Baeza</strong> ha navegado por todo el sistema</p>
+            <p>✅ Usuario <strong>Demo</strong> ha navegado por todo el sistema</p>
             <div class="completion-stats">
                 <div class="stat">
                     <span class="stat-value">${duration}s</span>
