@@ -1,0 +1,31 @@
+{
+  "run_id": "run_1",
+  "timestamp": "2024-01-15T10:30:00Z",
+  "user_id": "guest_001",
+  "menu_text": "Pizza Margherita con tomate, mozzarella y albahaca. Ensalada César con lechuga, pollo y parmesano.",
+  "dishes": [
+    {
+      "name": "Pizza Margherita",
+      "ingredients": ["masa de trigo", "salsa de tomate", "mozzarella", "albahaca"],
+      "compatibility_level": "warning",
+      "analysis": "Contiene gluten y lácteos. Puede causar problemas para personas con intolerancia a la lactosa o celiaquía.",
+      "recommendations": "Considerar opciones sin gluten y sin lactosa para mayor inclusividad."
+    },
+    {
+      "name": "Ensalada César",
+      "ingredients": ["lechuga romana", "pollo", "queso parmesano", "aderezo césar"],
+      "compatibility_level": "safe",
+      "analysis": "Opción relativamente segura. El pollo es una proteína limpia y la lechuga es bien tolerada.",
+      "recommendations": "Verificar ingredientes del aderezo para alérgenos ocultos."
+    }
+  ],
+  "overall_analysis": {
+    "total_dishes": 2,
+    "safe_dishes": 1,
+    "warning_dishes": 1,
+    "danger_dishes": 0,
+    "main_concerns": ["gluten", "lactosa"],
+    "recommendations": "Menú mixto con opciones seguras y de precaución."
+  }
+}
+

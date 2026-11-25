@@ -24,7 +24,7 @@ Prototipo de analizador de menús: cruza los platillos con el perfil alimentario
 </div>
 
 > [!NOTE]
-> **Prototipo con backend incompleto y sin deploy.** El código está dentro de `AliMentor_AI.rar` y la documentación en `Documentacion.zip`. El servidor que sirve la interfaz (`Frond/app.py`) **simula** el análisis con reglas por palabras clave y datos en memoria; el backend con OpenAI y MySQL (`Back/`) está escrito pero no quedó conectado ni desplegado. No hay demo en línea ni capturas de la app.
+> **Prototipo con backend incompleto y sin deploy.** El código está en las carpetas `Frond/` y `Back/` y la documentación en `Documentacion.zip`. El servidor que sirve la interfaz (`Frond/app.py`) **simula** el análisis con reglas por palabras clave y datos en memoria; el backend con OpenAI y MySQL (`Back/`) está escrito pero no quedó conectado ni desplegado. No hay demo en línea ni capturas de la app.
 
 ---
 
@@ -87,21 +87,19 @@ Tablas: `usuarios`, `platos`, `acciones_ia`, `feedback` y `mejora_ia`. Las restr
 
 ## 🚀 Correrlo en tu compu
 
-Primero descomprime `AliMentor_AI.rar` (por ejemplo con 7-Zip o `unar`).
-
 ```bash
 # Interfaz con datos simulados (lo que funciona hoy)
-cd AliMentor_AI/Frond
+cd Frond
 pip install flask flask-cors
 python app.py            # http://127.0.0.1:5000
 ```
 
 ```bash
 # Backend con OpenAI y MySQL (incompleto)
-cd AliMentor_AI/Back
+cd Back
 python -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
-cp env_example.txt .env  # llena DB_* y OPENAI_API_KEY
+cp .env.example .env    # llena DB_*, OPENAI_API_KEY y SECRET_KEY
 python app.py
 python -m pytest tests/
 ```

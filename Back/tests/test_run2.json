@@ -1,0 +1,241 @@
+{
+  "test_name": "Test Run 2 - Análisis con Mejoras Aplicadas",
+  "description": "Simula un segundo análisis después de aplicar mejoras basadas en feedback del Run 1",
+  "timestamp": "2024-01-15T11:30:00Z",
+  "prerequisites": {
+    "requires": "test_run1.json",
+    "feedback_accumulated": 5,
+    "improvements_applied": true
+  },
+  "test_data": {
+    "menu_text": "MENÚ ESPECIAL\n\nENTRADAS\n1. Gazpacho andaluz - Tomate, pepino, pimiento, aceite de oliva - $7.00\n2. Bruschetta italiana - Pan tostado, tomate, albahaca, mozzarella - $9.00\n\nPLATOS PRINCIPALES\n3. Risotto de hongos - Arroz arborio, hongos porcini, parmesano - $16.00\n4. Bacalao a la vizcaína - Con pimientos y cebolla - $19.00\n5. Lasagna vegetariana - Pasta, espinacas, ricotta, tomate - $15.00\n\nPOSTRES\n6. Flan de caramelo - Tradicional con caramelo líquido - $6.00\n7. Sorbete de limón - Sin lácteos - $5.00",
+    "user_id": 1,
+    "expected_improvements": {
+      "mejor_deteccion_alergenos": true,
+      "categorizacion_mas_precisa": true,
+      "ingredientes_mas_detallados": true
+    }
+  },
+  "test_scenarios": [
+    {
+      "scenario": "Análisis mejorado de menú",
+      "endpoint": "/analyze",
+      "method": "POST",
+      "request_body": {
+        "menu_text": "MENÚ ESPECIAL\n\nENTRADAS\n1. Gazpacho andaluz - Tomate, pepino, pimiento, aceite de oliva - $7.00\n2. Bruschetta italiana - Pan tostado, tomate, albahaca, mozzarella - $9.00\n\nPLATOS PRINCIPALES\n3. Risotto de hongos - Arroz arborio, hongos porcini, parmesano - $16.00\n4. Bacalao a la vizcaína - Con pimientos y cebolla - $19.00\n5. Lasagna vegetariana - Pasta, espinacas, ricotta, tomate - $15.00\n\nPOSTRES\n6. Flan de caramelo - Tradicional con caramelo líquido - $6.00\n7. Sorbete de limón - Sin lácteos - $5.00",
+        "user_id": 1
+      },
+      "expected_response": {
+        "success": true,
+        "data": {
+          "analisis": {
+            "platos_detectados": [
+              {
+                "nombre": "Gazpacho andaluz",
+                "categoria": "entrada",
+                "ingredientes": ["tomate", "pepino", "pimiento", "aceite_oliva"],
+                "alergenos_detectados": [],
+                "precio": 7.00,
+                "nivel_confianza": 0.95
+              },
+              {
+                "nombre": "Bruschetta italiana",
+                "categoria": "entrada",
+                "ingredientes": ["pan_tostado", "tomate", "albahaca", "mozzarella"],
+                "alergenos_detectados": ["gluten", "lactosa"],
+                "precio": 9.00,
+                "nivel_confianza": 0.92
+              },
+              {
+                "nombre": "Risotto de hongos",
+                "categoria": "plato_principal",
+                "ingredientes": ["arroz_arborio", "hongos_porcini", "parmesano"],
+                "alergenos_detectados": ["lactosa"],
+                "precio": 16.00,
+                "nivel_confianza": 0.90
+              },
+              {
+                "nombre": "Bacalao a la vizcaína",
+                "categoria": "plato_principal",
+                "ingredientes": ["bacalao", "pimientos", "cebolla"],
+                "alergenos_detectados": [],
+                "precio": 19.00,
+                "nivel_confianza": 0.88
+              },
+              {
+                "nombre": "Lasagna vegetariana",
+                "categoria": "plato_principal",
+                "ingredientes": ["pasta", "espinacas", "ricotta", "tomate"],
+                "alergenos_detectados": ["gluten", "lactosa", "huevos"],
+                "precio": 15.00,
+                "nivel_confianza": 0.93
+              },
+              {
+                "nombre": "Flan de caramelo",
+                "categoria": "postre",
+                "ingredientes": ["huevos", "leche", "azúcar", "caramelo"],
+                "alergenos_detectados": ["huevos", "lactosa"],
+                "precio": 6.00,
+                "nivel_confianza": 0.91
+              },
+              {
+                "nombre": "Sorbete de limón",
+                "categoria": "postre",
+                "ingredientes": ["limón", "azúcar", "agua"],
+                "alergenos_detectados": [],
+                "precio": 5.00,
+                "nivel_confianza": 0.94
+              }
+            ],
+            "ingredientes_totales": ["tomate", "pepino", "pimiento", "aceite_oliva", "pan_tostado", "albahaca", "mozzarella", "arroz_arborio", "hongos_porcini", "parmesano", "bacalao", "cebolla", "pasta", "espinacas", "ricotta", "huevos", "leche", "azúcar", "caramelo", "limón", "agua"],
+            "alergenos_detectados": ["gluten", "lactosa", "huevos"],
+            "recomendaciones": [
+              "El gazpacho y sorbete de limón son opciones sin alérgenos",
+              "La lasagna vegetariana contiene múltiples alérgenos",
+              "El risotto es una buena opción para personas con intolerancia al gluten"
+            ],
+            "nivel_confianza_general": 0.92
+          },
+          "platos_guardados": [],
+          "total_platos": 7,
+          "mejoras_aplicadas": true
+        }
+      }
+    },
+    {
+      "scenario": "Verificar mejoras aplicadas",
+      "endpoint": "/improve/status",
+      "method": "GET",
+      "expected_response": {
+        "success": true,
+        "data": {
+          "estado_mejoras": {
+            "total_mejoras": 1,
+            "mejoras_aplicadas": 1,
+            "confianza_promedio": 0.85
+          }
+        }
+      }
+    },
+    {
+      "scenario": "Obtener métricas de mejora",
+      "endpoint": "/metrics/improvement",
+      "method": "GET",
+      "query_params": "period=7",
+      "expected_response": {
+        "success": true,
+        "data": {
+          "tasa_mejora": 100.0,
+          "confianza_promedio": 0.85,
+          "mejoras_aplicadas": 1
+        }
+      }
+    },
+    {
+      "scenario": "Feedback sobre análisis mejorado",
+      "endpoint": "/feedback",
+      "method": "POST",
+      "request_body": {
+        "usuario_id": 1,
+        "plato_id": 3,
+        "comentario": "Excelente detección de ingredientes, mucho más precisa que antes",
+        "calificacion": 5,
+        "tipo_feedback": "positivo"
+      },
+      "expected_response": {
+        "success": true,
+        "data": {
+          "feedback": {
+            "id_feedback": 3,
+            "usuario_id": 1,
+            "plato_id": 3,
+            "calificacion": 5,
+            "tipo_feedback": "positivo"
+          }
+        }
+      }
+    },
+    {
+      "scenario": "Verificar precisión mejorada",
+      "endpoint": "/metrics/precision",
+      "method": "GET",
+      "query_params": "period=7",
+      "expected_response": {
+        "success": true,
+        "data": {
+          "precision_general": 90.0,
+          "tendencia": "mejorando"
+        }
+      }
+    }
+  ],
+  "improvement_validation": [
+    {
+      "aspecto": "Detección de alérgenos",
+      "run1_accuracy": 75,
+      "run2_accuracy": 90,
+      "mejora_esperada": 15
+    },
+    {
+      "aspecto": "Categorización de platos",
+      "run1_accuracy": 80,
+      "run2_accuracy": 95,
+      "mejora_esperada": 15
+    },
+    {
+      "aspecto": "Detección de ingredientes",
+      "run1_accuracy": 85,
+      "run2_accuracy": 92,
+      "mejora_esperada": 7
+    },
+    {
+      "aspecto": "Estimación de precios",
+      "run1_accuracy": 90,
+      "run2_accuracy": 95,
+      "mejora_esperada": 5
+    }
+  ],
+  "validation_checks": [
+    {
+      "check": "Verificar nivel de confianza en análisis",
+      "field": "data.analisis.nivel_confianza_general",
+      "expected_min": 0.85
+    },
+    {
+      "check": "Verificar mejoras aplicadas",
+      "field": "data.mejoras_aplicadas",
+      "expected_value": true
+    },
+    {
+      "check": "Verificar detección mejorada de alérgenos",
+      "field": "data.analisis.platos_detectados[1].alergenos_detectados",
+      "expected_contains": ["gluten", "lactosa"]
+    },
+    {
+      "check": "Verificar ingredientes más detallados",
+      "field": "data.analisis.ingredientes_totales",
+      "expected_contains": ["hongos_porcini", "aceite_oliva"]
+    }
+  ],
+  "performance_metrics": {
+    "max_response_time_ms": 4000,
+    "expected_accuracy_percentage": 92,
+    "memory_usage_mb": 95,
+    "improvement_percentage": 7
+  },
+  "comparison_with_run1": {
+    "mejoras_observadas": [
+      "Mayor precisión en detección de alérgenos",
+      "Categorización más precisa de platos",
+      "Ingredientes más detallados y específicos",
+      "Niveles de confianza incluidos en análisis",
+      "Mejor detección de ingredientes regionales"
+    ],
+    "metricas_comparativas": {
+      "tiempo_respuesta": "mejorado",
+      "precision_general": "aumentada",
+      "satisfaccion_usuario": "aumentada",
+      "tasa_errores": "reducida"
+    }
+  }
+}

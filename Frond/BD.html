@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama BD - AliMentor AI</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 100vh;
+            position: relative;
+            cursor: grab;
+        }
+
+        #canvas.grabbing {
+            cursor: grabbing;
+        }
+
+        svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .table {
+            position: absolute;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            min-width: 280px;
+            cursor: move;
+            z-index: 10;
+            user-select: none;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 16px;
+            border-radius: 8px 8px 0 0;
+            font-weight: bold;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .table-body {
+            padding: 0;
+        }
+
+        .field {
+            padding: 10px 16px;
+            border-bottom: 1px solid #e0e0e0;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .field:last-child {
+            border-bottom: none;
+        }
+
+        .field.primary-key {
+            background: #fff3cd;
+            font-weight: 600;
+        }
+
+        .field.foreign-key {
+            background: #d1ecf1;
+        }
+
+        .key-icon {
+            font-size: 14px;
+        }
+
+        .field-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .field-type {
+            color: #666;
+            font-size: 11px;
+        }
+
+        line {
+            stroke: #ffffff;
+            stroke-width: 2;
+            stroke-dasharray: 5, 5;
+            opacity: 0.8;
+        }
+
+        .title {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            z-index: 100;
+        }
+
+        .instructions {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 14px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            z-index: 100;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="title">🚀 AliMentor AI - Diagrama de Base de Datos</div>
+    <div class="instructions">✨ Arrastra las tablas para reorganizar el diagrama</div>
+    
+    <div id="canvas">
+        <svg id="connections"></svg>
+    </div>
+
+    <script>
+        const tables = [
+            {
+                name: 'usuarios',
+                x: 100,
+                y: 150,
+                fields: [
+                    { name: 'id_usuario', type: 'INT', isPK: true },
+                    { name: 'nombre', type: 'VARCHAR(100)' },
+                    { name: 'edad', type: 'INT' },
+                    { name: 'genero', type: 'VARCHAR(20)' },
+                    { name: 'restricciones', type: 'JSON' },
+                    { name: 'alergias', type: 'JSON' },
+                    { name: 'enfermedades', type: 'JSON' },
+                    { name: 'fecha_creacion', type: 'DATETIME' }
+                ]
+            },
+            {
+                name: 'platos',
+                x: 550,
+                y: 150,
+                fields: [
+                    { name: 'id_plato', type: 'INT', isPK: true },
+                    { name: 'nombre', type: 'VARCHAR(150)' },
+                    { name: 'descripcion', type: 'TEXT' },
+                    { name: 'categoria', type: 'VARCHAR(50)' },
+                    { name: 'ingredientes', type: 'JSON' },
+                    { name: 'alergenos_detectados', type: 'JSON' },
+                    { name: 'precio', type: 'DECIMAL(10,2)' },
+                    { name: 'fuente', type: 'VARCHAR(100)' },
+                    { name: 'fecha_registro', type: 'DATETIME' }
+                ]
+            },
+            {
+                name: 'feedback',
+                x: 325,
+                y: 450,
+                fields: [
+                    { name: 'id_feedback', type: 'INT', isPK: true },
+                    { name: 'usuario_id', type: 'INT', isFK: true },
+                    { name: 'plato_id', type: 'INT', isFK: true },
+                    { name: 'comentario', type: 'TEXT' },
+                    { name: 'calificacion', type: 'TINYINT' },
+                    { name: 'tipo_feedback', type: 'ENUM' },
+                    { name: 'fecha', type: 'DATETIME' }
+                ]
+            },
+            {
+                name: 'acciones_IA',
+                x: 1000,
+                y: 200,
+                fields: [
+                    { name: 'id_accion', type: 'INT', isPK: true },
+                    { name: 'usuario_id', type: 'INT', isFK: true },
+                    { name: 'plato_id', type: 'INT', isFK: true },
+                    { name: 'tipo_accion', type: 'VARCHAR(50)' },
+                    { name: 'entrada_prompt', type: 'TEXT' },
+                    { name: 'salida_resumen', type: 'TEXT' },
+                    { name: 'exito', type: 'BOOLEAN' },
+                    { name: 'fecha', type: 'DATETIME' }
+                ]
+            },
+            {
+                name: 'mejora_ia',
+                x: 1000,
+                y: 550,
+                fields: [
+                    { name: 'id_mejora', type: 'INT', isPK: true },
+                    { name: 'id_accion', type: 'INT', isFK: true },
+                    { name: 'ajuste_prompt', type: 'TEXT' },
+                    { name: 'observacion', type: 'TEXT' },
+                    { name: 'confianza', type: 'DECIMAL(3,2)' },
+                    { name: 'fecha', type: 'DATETIME' }
+                ]
+            }
+        ];
+
+        const connections = [
+            { from: 'feedback', to: 'usuarios', fromField: 'usuario_id' },
+            { from: 'feedback', to: 'platos', fromField: 'plato_id' },
+            { from: 'acciones_IA', to: 'usuarios', fromField: 'usuario_id' },
+            { from: 'acciones_IA', to: 'platos', fromField: 'plato_id' },
+            { from: 'mejora_ia', to: 'acciones_IA', fromField: 'id_accion' }
+        ];
+
+        const canvas = document.getElementById('canvas');
+        const svg = document.getElementById('connections');
+
+        // Crear tablas
+        tables.forEach(table => {
+            const tableEl = document.createElement('div');
+            tableEl.className = 'table';
+            tableEl.style.left = table.x + 'px';
+            tableEl.style.top = table.y + 'px';
+            tableEl.dataset.tableName = table.name;
+
+            const header = document.createElement('div');
+            header.className = 'table-header';
+            header.innerHTML = `📊 ${table.name}`;
+            tableEl.appendChild(header);
+
+            const body = document.createElement('div');
+            body.className = 'table-body';
+            
+            table.fields.forEach(field => {
+                const fieldEl = document.createElement('div');
+                fieldEl.className = 'field';
+                if (field.isPK) fieldEl.classList.add('primary-key');
+                if (field.isFK) fieldEl.classList.add('foreign-key');
+                
+                const icon = field.isPK ? '🔑' : field.isFK ? '🔗' : '▪️';
+                fieldEl.innerHTML = `
+                    <span class="key-icon">${icon}</span>
+                    <span class="field-name">${field.name}</span>
+                    <span class="field-type">${field.type}</span>
+                `;
+                body.appendChild(fieldEl);
+            });
+            
+            tableEl.appendChild(body);
+            canvas.appendChild(tableEl);
+
+            // Hacer draggable
+            let isDragging = false;
+            let offsetX, offsetY;
+
+            tableEl.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                offsetX = e.clientX - tableEl.offsetLeft;
+                offsetY = e.clientY - tableEl.offsetTop;
+                tableEl.style.zIndex = '100';
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (isDragging && e.target.closest('.table') === tableEl) {
+                    const x = e.clientX - offsetX;
+                    const y = e.clientY - offsetY;
+                    tableEl.style.left = x + 'px';
+                    tableEl.style.top = y + 'px';
+                    table.x = x;
+                    table.y = y;
+                    drawConnections();
+                }
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isDragging) {
+                    isDragging = false;
+                    tableEl.style.zIndex = '10';
+                }
+            });
+        });
+
+        function drawConnections() {
+            svg.innerHTML = '';
+            
+            connections.forEach(conn => {
+                const fromTable = tables.find(t => t.name === conn.from);
+                const toTable = tables.find(t => t.name === conn.to);
+                
+                if (!fromTable || !toTable) return;
+
+                const fromEl = document.querySelector(`[data-table-name="${conn.from}"]`);
+                const toEl = document.querySelector(`[data-table-name="${conn.to}"]`);
+                
+                const fromX = fromTable.x + fromEl.offsetWidth / 2;
+                const fromY = fromTable.y + fromEl.offsetHeight / 2;
+                const toX = toTable.x + toEl.offsetWidth / 2;
+                const toY = toTable.y + toEl.offsetHeight / 2;
+
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', fromX);
+                line.setAttribute('y1', fromY);
+                line.setAttribute('x2', toX);
+                line.setAttribute('y2', toY);
+                svg.appendChild(line);
+            });
+        }
+
+        // Dibujar conexiones iniciales
+        drawConnections();
+
+        // Redibujar al cambiar tamaño de ventana
+        window.addEventListener('resize', drawConnections);
+    </script>
+</body>
+</html>

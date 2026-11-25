@@ -1,0 +1,215 @@
+{
+  "test_name": "Test Run 1 - Análisis Inicial de Menú",
+  "description": "Simula el primer análisis de un menú sin mejoras previas aplicadas",
+  "timestamp": "2024-01-15T10:00:00Z",
+  "test_data": {
+    "menu_text": "MENÚ DEL DÍA\n\nENTRADAS\n1. Ensalada César - Lechuga romana, crutones, parmesano, aderezo césar - $8.50\n2. Sopa de tomate - Con albahaca fresca y crutones - $6.00\n\nPLATOS PRINCIPALES\n3. Pollo a la parrilla - Pechuga de pollo, arroz pilaf, vegetales al vapor - $15.00\n4. Salmón al horno - Con quinoa, espárragos y limón - $18.00\n5. Pasta Alfredo - Fettuccine, salsa cremosa, champiñones - $14.00\n\nPOSTRES\n6. Tiramisú - Tradicional con café y mascarpone - $7.00\n7. Helado de vainilla - Con frutas frescas - $5.00",
+    "user_id": 1,
+    "expected_results": {
+      "total_platos_esperados": 7,
+      "categorias_esperadas": ["entrada", "plato_principal", "postre"],
+      "ingredientes_clave": ["lechuga", "pollo", "salmón", "pasta", "queso", "gluten"],
+      "alergenos_esperados": ["gluten", "lactosa", "huevos", "frutos_secos"]
+    }
+  },
+  "test_scenarios": [
+    {
+      "scenario": "Análisis básico de menú",
+      "endpoint": "/analyze",
+      "method": "POST",
+      "request_body": {
+        "menu_text": "MENÚ DEL DÍA\n\nENTRADAS\n1. Ensalada César - Lechuga romana, crutones, parmesano, aderezo césar - $8.50\n2. Sopa de tomate - Con albahaca fresca y crutones - $6.00\n\nPLATOS PRINCIPALES\n3. Pollo a la parrilla - Pechuga de pollo, arroz pilaf, vegetales al vapor - $15.00\n4. Salmón al horno - Con quinoa, espárragos y limón - $18.00\n5. Pasta Alfredo - Fettuccine, salsa cremosa, champiñones - $14.00\n\nPOSTRES\n6. Tiramisú - Tradicional con café y mascarpone - $7.00\n7. Helado de vainilla - Con frutas frescas - $5.00",
+        "user_id": 1
+      },
+      "expected_response": {
+        "success": true,
+        "data": {
+          "analisis": {
+            "platos_detectados": [
+              {
+                "nombre": "Ensalada César",
+                "categoria": "entrada",
+                "ingredientes": ["lechuga", "crutones", "parmesano", "aderezo"],
+                "alergenos_detectados": ["gluten", "lactosa"],
+                "precio": 8.50
+              },
+              {
+                "nombre": "Sopa de tomate",
+                "categoria": "entrada",
+                "ingredientes": ["tomate", "albahaca", "crutones"],
+                "alergenos_detectados": ["gluten"],
+                "precio": 6.00
+              },
+              {
+                "nombre": "Pollo a la parrilla",
+                "categoria": "plato_principal",
+                "ingredientes": ["pollo", "arroz", "vegetales"],
+                "alergenos_detectados": [],
+                "precio": 15.00
+              },
+              {
+                "nombre": "Salmón al horno",
+                "categoria": "plato_principal",
+                "ingredientes": ["salmón", "quinoa", "espárragos", "limón"],
+                "alergenos_detectados": [],
+                "precio": 18.00
+              },
+              {
+                "nombre": "Pasta Alfredo",
+                "categoria": "plato_principal",
+                "ingredientes": ["fettuccine", "salsa_cremosa", "champiñones"],
+                "alergenos_detectados": ["gluten", "lactosa"],
+                "precio": 14.00
+              },
+              {
+                "nombre": "Tiramisú",
+                "categoria": "postre",
+                "ingredientes": ["café", "mascarpone", "bizcocho"],
+                "alergenos_detectados": ["huevos", "lactosa", "gluten"],
+                "precio": 7.00
+              },
+              {
+                "nombre": "Helado de vainilla",
+                "categoria": "postre",
+                "ingredientes": ["vainilla", "leche", "azúcar", "frutas"],
+                "alergenos_detectados": ["lactosa", "huevos"],
+                "precio": 5.00
+              }
+            ],
+            "ingredientes_totales": ["lechuga", "crutones", "parmesano", "aderezo", "tomate", "albahaca", "pollo", "arroz", "vegetales", "salmón", "quinoa", "espárragos", "limón", "fettuccine", "salsa_cremosa", "champiñones", "café", "mascarpone", "bizcocho", "vainilla", "leche", "azúcar", "frutas"],
+            "alergenos_detectados": ["gluten", "lactosa", "huevos"],
+            "recomendaciones": [
+              "El menú contiene varios platos con gluten, ideal para personas sin restricciones",
+              "Hay opciones sin alérgenos como el pollo a la parrilla y salmón al horno",
+              "Los postres contienen lácteos y huevos, no aptos para veganos"
+            ]
+          },
+          "platos_guardados": [],
+          "total_platos": 7
+        }
+      }
+    },
+    {
+      "scenario": "Crear usuario de prueba",
+      "endpoint": "/usuarios",
+      "method": "POST",
+      "request_body": {
+        "nombre": "Usuario Test 1",
+        "edad": 30,
+        "genero": "femenino",
+        "restricciones": ["vegetariano"],
+        "alergias": ["lactosa"],
+        "enfermedades": []
+      },
+      "expected_response": {
+        "success": true,
+        "data": {
+          "usuario": {
+            "id_usuario": 1,
+            "nombre": "Usuario Test 1",
+            "restricciones": ["vegetariano"],
+            "alergias": ["lactosa"]
+          }
+        }
+      }
+    },
+    {
+      "scenario": "Obtener recomendaciones para usuario",
+      "endpoint": "/recommend",
+      "method": "GET",
+      "query_params": "user_id=1",
+      "expected_response": {
+        "success": true,
+        "data": {
+          "recomendaciones": [
+            {
+              "nombre": "Salmón al horno",
+              "nivel_riesgo": "bajo",
+              "recomendacion": "Plato seguro para tu perfil dietético"
+            },
+            {
+              "nombre": "Pollo a la parrilla",
+              "nivel_riesgo": "bajo",
+              "recomendacion": "Plato seguro para tu perfil dietético"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "scenario": "Enviar feedback positivo",
+      "endpoint": "/feedback",
+      "method": "POST",
+      "request_body": {
+        "usuario_id": 1,
+        "plato_id": 1,
+        "comentario": "El análisis fue muy preciso, detectó correctamente todos los ingredientes",
+        "calificacion": 5,
+        "tipo_feedback": "positivo"
+      },
+      "expected_response": {
+        "success": true,
+        "data": {
+          "feedback": {
+            "id_feedback": 1,
+            "usuario_id": 1,
+            "plato_id": 1,
+            "calificacion": 5,
+            "tipo_feedback": "positivo"
+          }
+        }
+      }
+    },
+    {
+      "scenario": "Enviar feedback de corrección",
+      "endpoint": "/feedback",
+      "method": "POST",
+      "request_body": {
+        "usuario_id": 1,
+        "plato_id": 2,
+        "comentario": "La sopa de tomate no contiene gluten, solo los crutones que son opcionales",
+        "calificacion": 3,
+        "tipo_feedback": "correccion"
+      },
+      "expected_response": {
+        "success": true,
+        "data": {
+          "feedback": {
+            "id_feedback": 2,
+            "usuario_id": 1,
+            "plato_id": 2,
+            "calificacion": 3,
+            "tipo_feedback": "correccion"
+          }
+        }
+      }
+    }
+  ],
+  "validation_checks": [
+    {
+      "check": "Verificar que se detectaron 7 platos",
+      "field": "data.total_platos",
+      "expected_value": 7
+    },
+    {
+      "check": "Verificar detección de alérgenos",
+      "field": "data.analisis.alergenos_detectados",
+      "expected_contains": ["gluten", "lactosa"]
+    },
+    {
+      "check": "Verificar categorización correcta",
+      "field": "data.analisis.platos_detectados[0].categoria",
+      "expected_value": "entrada"
+    },
+    {
+      "check": "Verificar detección de precios",
+      "field": "data.analisis.platos_detectados[0].precio",
+      "expected_type": "number"
+    }
+  ],
+  "performance_metrics": {
+    "max_response_time_ms": 5000,
+    "expected_accuracy_percentage": 85,
+    "memory_usage_mb": 100
+  }
+}

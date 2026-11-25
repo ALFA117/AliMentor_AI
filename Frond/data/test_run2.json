@@ -1,0 +1,48 @@
+{
+  "run_id": "run_2",
+  "timestamp": "2024-01-15T11:45:00Z",
+  "user_id": "guest_001",
+  "menu_text": "Pizza Margherita con tomate, mozzarella y albahaca. Ensalada César con lechuga, pollo y parmesano.",
+  "dishes": [
+    {
+      "name": "Pizza Margherita",
+      "ingredients": ["masa de trigo", "salsa de tomate", "mozzarella", "albahaca"],
+      "compatibility_level": "warning",
+      "analysis": "Contiene gluten y lácteos. Puede causar problemas para personas con intolerancia a la lactosa o celiaquía. RECOMENDACIÓN MEJORADA: Ofrecer versión sin gluten con masa de arroz y queso vegano.",
+      "recommendations": "Versión mejorada disponible: Pizza sin gluten con masa de arroz, queso vegano y tomates orgánicos. Incluir información nutricional detallada."
+    },
+    {
+      "name": "Ensalada César",
+      "ingredients": ["lechuga romana", "pollo", "queso parmesano", "aderezo césar"],
+      "compatibility_level": "safe",
+      "analysis": "Opción segura con proteína limpia. MEJORADO: Aderezo sin lácteos disponible, pollo orgánico certificado.",
+      "recommendations": "Versión premium: Ensalada con aderezo vegano, pollo orgánico y opción de queso parmesano sin lactosa."
+    }
+  ],
+  "overall_analysis": {
+    "total_dishes": 2,
+    "safe_dishes": 1,
+    "warning_dishes": 1,
+    "danger_dishes": 0,
+    "main_concerns": ["gluten", "lactosa"],
+    "recommendations": "Menú mejorado con opciones alternativas sin alérgenos y versiones premium disponibles.",
+    "improvements": [
+      "Agregadas opciones sin gluten",
+      "Versiones veganas disponibles",
+      "Información nutricional detallada",
+      "Certificaciones orgánicas"
+    ]
+  },
+  "feedback_integrated": {
+    "total_feedback": 3,
+    "positive_feedback": 2,
+    "negative_feedback": 1,
+    "average_rating": 4.2,
+    "key_improvements": [
+      "Mejor información sobre alérgenos",
+      "Opciones alternativas más claras",
+      "Recomendaciones más específicas"
+    ]
+  }
+}
+

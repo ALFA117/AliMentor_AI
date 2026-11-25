@@ -1,0 +1,28 @@
+{
+  "accuracy": 0.92,
+  "satisfaction": 4.3,
+  "improvement_rate": 0.15,
+  "total_analyses": 1247,
+  "total_feedback": 89,
+  "positive_feedback_percentage": 0.78,
+  "average_response_time": 2.3,
+  "trends": {
+    "accuracy_trend": [0.85, 0.87, 0.89, 0.91, 0.92],
+    "satisfaction_trend": [4.0, 4.1, 4.2, 4.2, 4.3],
+    "improvement_trend": [0.10, 0.12, 0.13, 0.14, 0.15]
+  },
+  "monthly_stats": {
+    "current_month": "Enero 2024",
+    "analyses_this_month": 156,
+    "feedback_this_month": 23,
+    "top_allergens": ["gluten", "lactosa", "nueces", "mariscos"],
+    "most_common_dishes": ["Pizza", "Ensalada", "Pasta", "Sándwich"]
+  },
+  "system_performance": {
+    "uptime": 0.999,
+    "average_processing_time": 1.8,
+    "error_rate": 0.02,
+    "user_retention": 0.85
+  }
+}
+
